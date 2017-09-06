@@ -21,7 +21,7 @@ import                   Foreign.Ptr ( castPtr, plusPtr )
 import                   System.Directory ( renameFile )
 import                   System.IO.Error ( catchIOError )
 import                   System.Log.Logger
-import                   System.Posix.Files ( setFdSize )
+import                   System.Posix.Files ( setFdSize, unionFileModes, ownerReadMode, ownerWriteMode )
 import                   System.Posix.IO ( OpenMode(..), defaultFileFlags, openFd, closeFd )
 import "unix-bytestring" System.Posix.IO.ByteString ( fdPreadBuf, fdPwriteBuf )
 import                   System.Posix.Types ( ByteCount, Fd, FileOffset )
@@ -76,7 +76,7 @@ mkStoreFile fileName count = do
     entrySize = 1 + storeSize (undefined :: f)
     fileSize  = count * fromIntegral entrySize
   
-  handle <- openFd fileName ReadWrite (Just 0x0600) defaultFileFlags
+  handle <- openFd fileName ReadWrite ( Just ( unionFileModes ownerReadMode ownerWriteMode ) ) defaultFileFlags
   setFdSize handle $ fromIntegral fileSize
   
   rds  <- newTVarIO 0
