@@ -1,7 +1,7 @@
 
 node {
   listen {
-    host = "*"
+    host = "::"
     port = 63763
   }
 
@@ -15,11 +15,6 @@ logging {
   
 }
 
-fproxy {
-  enabled = false
-  port = 8081
-}
-
 freenet {
   datastore {
     directory = "$(HOME)/.ads/data-store"
@@ -27,8 +22,4 @@ freenet {
     ssk-count = 300000
   }
   
-  companion {
-#    host = "127.0.0.1"
-    port = 12345
-  } 
 }
